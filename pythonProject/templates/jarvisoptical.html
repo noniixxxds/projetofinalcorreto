@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Jarvis</title>
+
+    <style>
+        /* Estilos CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: linear-gradient(120deg, #000000 0%, #000000 100%);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            background-color: #ffffff; /* Cor de fundo do container */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            overflow: hidden; /* Esconde conteúdo que ultrapassa o container */
+            width: 320px; /* Largura do container */
+            max-width: 100%;
+        }
+
+        .slider {
+            position: relative;
+            padding: 40px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form_control {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            transition: 0.3s ease-out;
+            color: #999999;
+            pointer-events: none;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease-out;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        input[type="text"]:focus + .label,
+        input[type="password"]:focus + .label {
+            top: -12px;
+            left: 10px;
+            background-color: #ffffff;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #007bff;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-out;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .bottom_text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555555;
+        }
+
+        .switch {
+            cursor: pointer;
+            color: #007bff;
+            transition: color 0.3s ease-out;
+        }
+
+        .switch:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="slider">
+            <form action="/login" method="POST" class="form">
+                <h2 class="title">Jarvis Login</h2>
+
+                <div class="form_control">
+                    <input type="text" id="username" name="username" required>
+                    <label for="username" class="label">Usuário</label>
+                </div>
+
+                <div class="form_control">
+                    <input type="password" id="password" name="password" required>
+                    <label for="password" class="label">Senha</label>
+                </div>
+
+                <button type="submit">Login</button>
+
+                <p class="bottom_text">
+                <span class="switch" onclick="window.location.href = 'RecuperarSenha';" style="color: blue; text-decoration: underline; cursor: pointer;">Esqueceu Senha?</span>
+
+
+
+
+
+
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

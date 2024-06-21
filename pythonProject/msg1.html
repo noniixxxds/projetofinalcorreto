@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enviar Mensagem</title>
+</head>
+<body>
+    <input type="text" id="mensagem" placeholder="Digite sua mensagem">
+    <button onclick="enviarMensagem()">Enviar</button>
+
+    <script>
+        function enviarMensagem() {
+            const mensagem = document.getElementById('mensagem').value;
+            localStorage.setItem('mensagem', mensagem);
+            alert('Mensagem enviada!');
+        }
+    </script>
+</body>
+</html>

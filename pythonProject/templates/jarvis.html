@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Pro Vision</title>
+
+
+    <!-- Adicionando bibliotecas necessárias -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.22.0/docxtemplater.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+    <style>
+        footer {
+    background-color: #fff; /* Mudança aqui para tornar o fundo branco */
+    color: #333; /* Alterado para uma cor mais escura para contrastar */
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra suave na parte superior */
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #333;
+        }
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        .container {
+            position: relative; /* Adicionando para que o posicionamento do loading seja relativo à div container */
+            max-width: 600px;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            max-height: 400px; /* Definindo a altura máxima */
+            overflow-y: auto; /* Habilitando rolagem vertical */
+        }
+
+        h1.title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-input {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            border: none;
+            outline: none;
+        }
+
+        .file-input:hover {
+            background-color: #2980b9;
+        }
+
+        button[type="submit"],
+        #copyButton,
+        #generateTxtButton,
+        #speakButton {
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        button[type="submit"]:hover,
+        #copyButton:hover,
+        #generateTxtButton:hover,
+        #speakButton:hover {
+            background-color: rgb(0, 0, 0);
+        }
+
+        button[type="submit"]::before,
+        #copyButton::before,
+        #generateTxtButton::before,
+        #speakButton::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            background-color: rgba(255, 255, 255, 0.4);
+            transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
+            border-radius: 50%;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        button[type="submit"]:active::before,
+        #copyButton:active::before,
+        #generateTxtButton:active::before,
+        #speakButton:active::before {
+            width: 300%;
+            height: 300%;
+            transform: translate(-50%, -50%);
+        }
+
+        #response {
+            border: 2px solid #fff;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #000000;
+        }
+
+        /* Estilo para o botão */
+        #returnpage {
+            background-color: #4CAF50; /* Cor de fundo */
+            color: white; /* Cor do texto */
+            padding: 10px 20px; /* Espaçamento interno */
+            font-size: 16px; /* Tamanho da fonte */
+            border: none; /* Remover a borda */
+            border-radius: 5px; /* Bordas arredondadas */
+            cursor: pointer; /* Cursor ao passar o mouse */
+        }
+
+        /* Estilo quando o mouse está sobre o botão */
+        #returnpage:hover {
+            background-color: #45a049; /* Cor de fundo quando o mouse está sobre */
+        }
+
+        /* Estilo quando o botão está pressionado */
+        #returnpage:active {
+            background-color: #3e8e41; /* Cor de fundo quando pressionado */
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="title">Jarvis Optmize Optical</h1>
+    <form id="imageForm" method="post" enctype="multipart/form-data">
+        <label class="file-input" for="image">Escolha Imagem Antiga</label>
+        <input type="file" name="image" id="image" accept="image/*" multiple style="display:none;">
+        <span id="selectedFile"></span>
+        <button type="submit">Iniciar Procedimentos</button>
+    </form>
+    <div id="responses"></div>
+    <button id="copyButton">Copiar Resposta</button>
+    <button id="generateTxtButton">Gerar Documento Texto</button>
+    <button id="returnpage"> Inserir Nova IMG  </button>
+    <!-- Adicionar botão de leitura de texto em voz alta -->
+    <button id="speakButton">Ler Texto em Voz Alta</button>
+</div>
+
+<script>
+    document.getElementById("returnpage").addEventListener("click",function(){
+        //Redirecionar para o link externo desejado
+        window.location.href = "processamento";
+    });
+
+    // Array para armazenar as respostas
+    var responses = [];
+
+    document.getElementById('image').addEventListener('change', function(event) {
+        document.getElementById('selectedFile').innerText = event.target.files[0].name;
+    });
+
+    document.getElementById('imageForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        // Alterando o texto do botão para "Carregando"
+        document.querySelector('button[type="submit"]').textContent = 'Carregando...';
+
+        fetch('/generate', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Alterando o texto de volta ao original após a conclusão da requisição
+            document.querySelector('button[type="submit"]').textContent = 'Iniciar Procedimentos';
+
+            // Adicionando a resposta ao array de respostas
+            responses.push(data.response || data.error);
+
+            // Renderizando as respostas na div de respostas
+            renderResponses();
+
+            // Ler o texto em voz alta
+            readText(data.response || data.error);
+        })
+        .catch(error => {
+            // Alterando o texto de volta ao original em caso de erro
+            document.querySelector('button[type="submit"]').textContent = 'Iniciar Procedimentos';
+            console.error('Error:', error);
+        });
+    });
+
+    document.getElementById('copyButton').addEventListener('click', function() {
+        var responseText = document.getElementById('response').innerText;
+        navigator.clipboard.writeText(responseText)
+            .then(() => alert('Texto copiado com sucesso!'))
+            .catch(err => console.error('Erro ao copiar texto: ', err));
+    });
+
+    document.getElementById('generateTxtButton').addEventListener('click', function() {
+        var responseText = document.getElementById('response').innerText;
+
+        // Criando um blob de texto
+        var blob = new Blob([responseText], { type: "text/plain;charset=utf-8" });
+
+        // Criando um link de download
+        var link = document.createElement('a');
+        link.download = "resposta.txt";
+        link.href = window.URL.createObjectURL(blob);
+
+        // Simulando o clique no link para iniciar o download
+        link.click();
+    });
+
+    // Função para ler texto em voz alta
+    function readText(text) {
+        var speech = new SpeechSynthesisUtterance();
+        speech.lang = 'pt-BR'; // Definindo o idioma para português do Brasil
+        speech.text = text;
+        window.speechSynthesis.speak(speech);
+    }
+
+    // Adicionar evento de clique ao botão de leitura de texto em voz alta
+    document.getElementById('speakButton').addEventListener('click', function() {
+        var responseText = document.getElementById('response').innerText;
+        readText(responseText);
+    });
+
+    // Função para renderizar as respostas
+    function renderResponses() {
+        var responsesContainer = document.getElementById('responses');
+        responsesContainer.innerHTML = ''; // Limpar o conteúdo anterior
+
+        responses.forEach(function(response) {
+            var responseDiv = document.createElement('div');
+            responseDiv.innerHTML = `<div style="border: 2px solid #fff; padding: 20px; margin-top: 20px; font-size: 16px; line-height: 1.6; background-color: rgba(255, 255, 255, 0.1); color: #000000;">${response}</div>`;
+            responsesContainer.appendChild(responseDiv);
+        });
+    }
+</script>
+</body>
+</html>
+
+
+<script>
+    // Função para copiar o conteúdo inteiro da div de respostas
+    function copyResponse() {
+        var responsesContainer = document.getElementById('responses');
+        var responseText = responsesContainer.innerText;
+        navigator.clipboard.writeText(responseText)
+            .then(() => alert('Texto copiado com sucesso!'))
+            .catch(err => console.error('Erro ao copiar texto: ', err));
+    }
+
+    // Função para gerar um novo documento de texto com o conteúdo da div de respostas
+    function generateTxtFile() {
+        var responsesContainer = document.getElementById('responses');
+        var responseText = responsesContainer.innerText;
+
+        // Criando um blob de texto
+        var blob = new Blob([responseText], { type: "text/plain;charset=utf-8" });
+
+        // Criando um link de download
+        var link = document.createElement('a');
+        link.download = "matricula.txt";
+        link.href = window.URL.createObjectURL(blob);
+
+        // Simulando o clique no link para iniciar o download
+        link.click();
+    }
+
+    // Adicionar os event listeners aos botões
+    document.getElementById('copyButton').addEventListener('click', copyResponse);
+    document.getElementById('generateTxtButton').addEventListener('click', generateTxtFile);
+</script>
+
+
+ <footer>
+        <p>&copy; Guilherme Dantas - Todos os direitos reservados</p>
+
+</body>
+    </footer>
+
+

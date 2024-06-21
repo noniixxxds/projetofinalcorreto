@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis - Desenvolvimento de Sistemas por Guilherme</title>
+    <style>
+        /* Reset de estilos para garantir consistência entre navegadores */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos gerais da página */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #000000;
+            color: #fff;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin: 0;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        header nav ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+
+        section h2 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        section p {
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .systems {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .system {
+            width: calc(50% - 20px);
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .system:hover {
+            transform: translateY(-5px);
+        }
+
+        .system h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .system p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container a:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            position: relative;
+            clear: both;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 992px) {
+            .system {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .system {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div style="display: flex; align-items: center;">
+                <!-- Título e GIF aqui -->
+                <h1 style="margin-right: 20px;">Jarvis Creation</h1>
+                <iframe src="https://giphy.com/embed/Ixo8cui5SWkE2jeMPz" width="100" height="100" style="border: none; overflow: hidden;" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#sistemas">Sistemas Produzidos</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="#sobre">Sobre Mim</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="sistemas">
+        <div class="container">
+            <h2>Bem-vindo(a)</h2>
+            <div class="systems">
+                <div class="system">
+                    <p></p><h3>Optical Recognize Aprendizado Adaptativo</h3>
+                    <p>Imagine uma maravilha tecnológica criada na interseção da ótica de ponta com inteligência artificial avançada. O Visão Óptica Reconhecimento Jarvis (VOR) é um testemunho da inovação, projetado para redefinir a maneira como percebemos e interagimos com o mundo..</p>
+                    <div class="button-container">
+                        <a href="#">Acessar</a>
+                    </div>
+                </div>
+                <div class="system">
+                    <h3>Plataforma de E-commerce</h3>
+                    <p>Criação de uma plataforma online para vendas com integração de pagamentos.</p>
+                </div>
+                <div class="system">
+                    <h3>Aplicativo Mobile</h3>
+                    <p>Desenvolvimento de um aplicativo móvel para melhorar a interação com os clientes.</p>
+                </div>
+                <div class="system">
+                    <h3>Sistema de Gerenciamento de Projetos</h3>
+                    <p>Implementação de um sistema para facilitar o gerenciamento de projetos internos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre">
+        <div class="container">
+            <h2>Sobre Mim</h2>
+            <p>Olá! Meu nome é Guilherme e possuo conhecimento avançado em integrações, automações e desenvolvimento de sistemas. Com mais de 5 anos de experiência na área tecnológica, sou especializado em Python, JavaScript, HTML, CSS, PHP e bancos de dados. Além disso, tenho expertise em análise de dados, inteligência artificial e machine learning.
+
+Minha paixão por criar soluções inovadoras e eficientes me permite não apenas atender, mas superar as expectativas dos meus clientes. Ao longo da minha carreira, tenho aplicado essas habilidades de maneira criativa e estratégica para resolver problemas complexos e impulsionar resultados positivos.
+
+Estou sempre em busca de novos desafios e oportunidades para aplicar meu conhecimento em projetos que possam impactar positivamente pessoas e organizações.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; Jarvis - Desenvolvimento de Sistemas por Guilherme. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

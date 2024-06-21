@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis OCR</title>
+    <style>
+        /* Estilo CSS fornecido */
+        body {
+            font-family: Arial, sans-serif; /* Define uma fonte padrão */
+            display: flex;
+            justify-content: center; /* Centraliza o conteúdo horizontalmente */
+            align-items: center; /* Centraliza o conteúdo verticalmente */
+            height: 100vh; /* Faz o corpo da página ocupar toda a altura da viewport */
+            margin: 0; /* Remove as margens padrão do corpo */
+            background-color: #f2f2f2; /* Cor de fundo para melhorar o contraste */
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Aumenta o espaço entre os elementos */
+            max-width: 350px;
+            padding: 30px;
+            border-radius: 20px;
+            position: relative;
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona sombra para destacar o formulário */
+            margin: auto; /* Centraliza o formulário horizontalmente */
+        }
+
+        .title {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Escolhe uma fonte mais elegante */
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            color: #00bfff;
+        }
+
+        .title::before {
+            width: 18px;
+            height: 18px;
+        }
+
+        .title::after {
+            width: 18px;
+            height: 18px;
+            animation: pulse 1s linear infinite;
+        }
+
+        .title::before,
+        .title::after {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            left: 0px;
+            background-color: #00bfff;
+        }
+
+        .message,
+        .signin {
+            font-size: 16px; /* Ajusta o tamanho da fonte */
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .signin {
+            text-align: center;
+        }
+
+        .signin a:hover {
+            text-decoration: underline royalblue;
+        }
+
+        .signin a {
+            color: #00bfff;
+        }
+
+        .flex {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .form label {
+            position: relative;
+            font-size: 18px;
+        }
+
+        .form label span {
+            color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            left: 10px;
+            top: 5px;
+            font-size: 0.9em;
+            transition: 0.3s ease;
+        }
+
+        .form label input {
+            background-color: #333;
+            color: #fff;
+            width: calc(100% - 40px); /* Aumenta a largura dos campos de entrada */
+            padding: 15px 20px; /* Ajusta o preenchimento para caber no campo maior */
+            outline: 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        .form label input:focus + span,
+        .form label input:valid + span {
+            color: #00bfff;
+            top: -15px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .input {
+            font-size: medium;
+        }
+
+        .submit {
+            border: none;
+            outline: none;
+            padding: 10px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px; /* Aumenta o tamanho do botão */
+            transform: .3s ease;
+            background-color: #00bfff;
+            cursor: pointer; /* Muda o cursor para indicar interatividade */
+        }
+
+        .submit:hover {
+            background-color: #00bfff96;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(0.9);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <h2 class="title">Processamento Jarvis</h2>
+        <label for="image-input"><span>Escolha uma imagem:</span></label>
+        <input type="file" accept="image/*" id="image-input" style="display: none;">
+        <span id="selected-image"></span> <!-- Exibe o caminho da imagem selecionada -->
+        <button onclick="document.getElementById('image-input').click();">Selecionar Imagem</button><br>
+        <label for="num-parts"><span>Número de Partes:</span></label><br>
+        <input type="number" id="num-parts" min="1" max="10" value="5"><br>
+        <label for="file-name"><span>Nome do Arquivo:</span></label><br>
+        <input type="text" id="file-name" placeholder="Digite o nome do arquivo"><br>
+        <button class="submit" onclick="cropAndDownload()">Processar</button>
+        <button class="submit" onclick="location.href='login';">Executar OCR</button> <!-- Adiciona botão para executar OCR -->
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function cropAndDownload() {
+            var input = document.getElementById('image-input');
+            var file = input.files[0];
+            var numParts = document.getElementById('num-parts').value;
+            var fileName = document.getElementById('file-name').value;
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = new Image();
+                    img.src = e.target.result;
+
+                    img.onload = function() {
+                        var width = img.width;
+                        var height = img.height / numParts;
+
+                        var folder = {
+                            name: fileName || 'imagens_cortadas',
+                            files: []
+                        };
+
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        canvas.width = width;
+                        canvas.height = height;
+
+                        for (var i = 0; i < numParts; i++) {
+                            ctx.drawImage(img, 0, i * height, width, height, 0, 0, width, height);
+                            var imageDataURL = canvas.toDataURL('image/jpeg'); // Change format if needed
+                            var blob = dataURItoBlob(imageDataURL);
+                            var file = new File([blob], (fileName || 'parte_') + i + '.jpg', { type: 'image/jpeg' }); // Change extension if needed
+                            folder.files.push(file);
+                        }
+
+                        createFolder(folder);
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function createFolder(folder) {
+            var zipFile = new JSZip();
+
+            for (var i = 0; i < folder.files.length; i++) {
+                zipFile.file(folder.files[i].name, folder.files[i]);
+            }
+
+            zipFile.generateAsync({type:"blob"}).then(function(content) {
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = folder.name + '.zip';
+                document.body.appendChild(link); // Append link to body
+                link.click(); // Simulate click on the download link
+
+                // Inform user that files have been saved
+                alert('Os arquivos foram salvos no seu computador.');
+
+                // Remove link from body
+                document.body.removeChild(link);
+            });
+        }
+
+        function dataURItoBlob(dataURI) {
+            var byteString = atob(dataURI.split(',')[1]);
+            var ab = new ArrayBuffer(byteString.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], {type: 'image/jpeg'}); // Change format if needed
+        }
+
+        // Atualiza o caminho da imagem selecionada
+        document.getElementById('image-input').addEventListener('change', function() {
+            const selectedImage = document.getElementById('selected-image');
+            if (this.files && this.files.length > 0) {
+                selectedImage.textContent = 'Imagem selecionada: ' + this.files[0].name;
+            } else {
+                selectedImage.textContent = '';
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+</body>
+</html>

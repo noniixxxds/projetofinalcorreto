@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receber Mensagem</title>
+</head>
+<body>
+    <h1>Mensagem recebida:</h1>
+    <p id="mensagemRecebida"></p>
+
+    <script>
+        window.onload = function() {
+            const mensagem = localStorage.getItem('mensagem');
+            if (mensagem) {
+                document.getElementById('mensagemRecebida').innerText = mensagem;
+            } else {
+                document.getElementById('mensagemRecebida').innerText = 'Nenhuma mensagem recebida.';
+            }
+        }
+    </script>
+</body>
+</html>
